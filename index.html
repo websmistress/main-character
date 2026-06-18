@@ -116,9 +116,11 @@
       padding:18px 22px 16px 22px;
       cursor:pointer; user-select:none;
       background: var(--pink);
-      transition:background .12s;
+      transition:background .3s;
     }
     .block-head:hover { background:#F07AAF; }
+    .block.all-done .block-head { background:#F9A8C7; }
+    .block.all-done .block-head:hover { background:#F7B8D0; }
 
     .block-eyebrow { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
     .block-num {
@@ -526,7 +528,7 @@ function renderBlock(b) {
   const s=bStats(b), st=blockStatus(b);
   const lbl={upcoming:'Ожидается',active:'★ В процессе',done:'✓ Завершён',late:'! Не завершён'};
   return `
-  <div class="block" id="blk-${b.id}">
+  <div class="block${s.pct===100?' all-done':''}" id="blk-${b.id}">
     <div class="block-head" onclick="toggleBlock('${b.id}')">
       <div>
         <div class="block-eyebrow">
@@ -573,6 +575,7 @@ function refreshBlock(bid) {
   $('bar-'+bid).style.width=s.pct+'%';
   $('pct-'+bid).textContent=s.pct+'%';
   $('cnt-'+bid).innerHTML=s.done+'&thinsp;/&thinsp;'+s.total;
+  $('blk-'+bid).classList.toggle('all-done', s.pct===100);
 }
 function refreshTotal() {
   const s=totalStats();
